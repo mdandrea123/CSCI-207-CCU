@@ -1,0 +1,11 @@
+Contains all files related to our second programming assignment.
+
+Description of assignment:
+finish implementing fig.06.15.c to make it work as intended (based on the comments and behavior described in the book).
+This will require you to find and complete the incomplete scan_fraction() code from fig.06.10.c.
+It will require you to complete the stubbed functions so that their functionality is completed. 
+Note what the book says about unit testing and integration testing. Tackle one part at a time.
+
+Complete the code and integrate into code base for project.
+
+Demonstrate the code working from command line and document in report.
