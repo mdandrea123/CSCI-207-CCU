@@ -1,0 +1,36 @@
+CC = gcc
+CFLAGS = -std=c99 -g -Wall -Wpedantic
+
+# List of source files
+SRCS = make_data_2d.c read_data_2d.c add_data_2d.c utilities.c
+
+# List of object files (automatically generated from source files)
+OBJS = $(SRCS:.c=.o)
+
+# Executable names
+PROGS = make_data_2d read_data_2d add_data_2d
+
+# Default target
+all: $(PROGS)
+
+# Compile rule for object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Compile rule for utilities.o
+utilities.o: utilities.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Compile rule for each program
+make_data_2d: make_data_2d.o utilities.o
+	$(CC) $(CFLAGS) -o $@ $^ -lm
+
+read_data_2d: read_data_2d.o utilities.o
+	$(CC) $(CFLAGS) -o $@ $^ -lm
+
+add_data_2d: add_data_2d.o utilities.o
+	$(CC) $(CFLAGS) -o $@ $^ -lm
+
+# Clean up object files and executables
+clean:
+	rm -f $(OBJS) $(PROGS)
