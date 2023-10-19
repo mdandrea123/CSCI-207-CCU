@@ -4,60 +4,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 #include "utilities.h"
 #include "timer.h"
 
-// Function to display usage information for the program
-void usage(char **argv)
-{
-    printf("Usage: %s -i <in file> -x <row index> -y <col index> -z <bit position> -o <output filename>", argv[0]);
-}
-
-// Function to parse command line arguments and store input file name, output file name, and print flag in variables
-void parse(int argc, char **argv, char **infile, char **outfile, int *pflag, int *crow, int *ccol, int *cbit)
-{
-    int opt;
-
-    // Parse command line arguments using getopt
-    while ((opt = getopt(argc, argv, "pi:o:x:y:z:")) != -1)
-    {
-        switch (opt)
-        {
-            case 'p':
-                *pflag = 1;
-                break;
-            case 'i':
-                *infile = optarg;
-                break;
-            case 'o':
-                *outfile = optarg;
-                break;
-            case 'x':
-                *crow = atoi(optarg);
-                break;
-            case 'y':
-                *ccol = atoi(optarg);
-                break;
-            case 'z':
-                *cbit = atoi(optarg);
-                break;
-            default:
-                usage(argv);
-                exit(1);
-        }
-    }
-
-    // Check if the input file and output file are provided
-    if (*infile == NULL || *outfile == NULL)
-    {
-        usage(argv);
-        exit(1);
-    }
-}
-
 int main(int argc, char **argv)
 {
+
+    srand(time(NULL)); // Seed the random number generator
     // Declare variables for matrices and their dimensions
+
     dtype **m1 = NULL;
     dtype **m2 = NULL;
     int rows = 0;
@@ -75,7 +31,13 @@ int main(int argc, char **argv)
     int pflag = 0;
 
     // Parse command line arguments and store input file name, output file name, and print flag in variables
-    parse(argc, argv, &infile, &outfile, &pflag, &crow, &ccol, &cbit);
+    parseCorrupt(argc, argv, &infile, &outfile, &pflag, &crow, &ccol, &cbit);
+
+    if(infile == NULL || outfile == NULL)
+    {
+        printf("Usage: [-p] -i <in file> [-x <row index>] [-y <col index>] [-z <bit position>] -o <output filename>\n");
+        exit(1);
+    }
 
    
     if (cbit > 31 || cbit < 0){
@@ -88,9 +50,8 @@ int main(int argc, char **argv)
 
     // Initialize a matrix from the input file
     initialize_from_file(&m1, &rows, &cols, infile);
-     if(crow < 0 || ccol < 0 || crow > rows || ccol > cols){
-        printf("Error: row and column index must be between 0 and the number rows inclusive.\n");
-        exit(1);
+    if(crow == 0){
+        
     }
 
     // Allocate memory for another matrix with an extra row

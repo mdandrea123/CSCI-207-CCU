@@ -4,6 +4,7 @@
 // Updated: 10/16/2023
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "utilities.h"
 #include "timer.h"
 
@@ -153,7 +154,7 @@ void print(dtype **A, int rows, int cols)
     // }
 
     int maxDigits[cols]; // Array to store the maximum width for each column
-    
+
     // Initialize maxDigits with 0 for each column
     for (int j = 0; j < cols; j++)
     {
@@ -352,6 +353,201 @@ void mul_matrix(dtype **A, dtype **B, dtype **C, int rows, int bcols, int acols)
             {
                 C[i][j] += (A[i][k] * B[k][j]);
             }
+        }
+    }
+}
+
+void parseAdd(int argc, char *argv[], char **afile, char **bfile, char **outfile, int *pFlag)
+{
+    *afile = NULL;
+    *bfile = NULL;
+    *outfile = NULL;
+    *pFlag = 0; // Initialize the print flag to 0 (off).
+
+    int opt;
+    while ((opt = getopt(argc, argv, "a:b:c:p")) != -1)
+    {
+        switch (opt)
+        {
+        case 'a':
+            *afile = optarg;
+            break;
+        case 'b':
+            *bfile = optarg;
+            break;
+        case 'c':
+            *outfile = optarg;
+            break;
+        case 'p':
+            *pFlag = 1; // Set the print flag to 1 if the '-p' option is provided.
+            break;
+        default:
+            printf("Usage: %s-a <in file1> -b <in file2> -c <out filename> [-p]\n", argv[0]);
+            exit(1);
+        }
+    }
+}
+
+void parseCols(int argc, char **argv, char **infile, char **outfile, int *pflag)
+{
+    int opt;
+
+    // Parse command line arguments using getopt
+    while ((opt = getopt(argc, argv, "pi:o:")) != -1)
+    {
+        switch (opt)
+        {
+        case 'p':
+            *pflag = 1;
+            break;
+        case 'i':
+            *infile = optarg;
+            break;
+        case 'o':
+            *outfile = optarg;
+            break;
+        default:
+            printf("Usage: %s -i <in file> -o <out filename> [-p]", argv[0]);
+            exit(1);
+        }
+    }
+}
+
+void parseData(int argc, char **argv, char **infile, char **outfile, int *pFlag)
+{
+    // Declare variables for command line arguments
+    int opt;
+
+    // Parse command line arguments using getopt
+    while ((opt = getopt(argc, argv, "pi:o:")) != -1)
+    {
+        switch (opt)
+        {
+        case 'p':
+            *pFlag = 1;
+            break;
+        case 'i':
+            *infile = optarg;
+            break;
+        case 'o':
+            *outfile = optarg;
+            break;
+        default:
+            printf("Usage: %s -i <in file> -o <out filename> [-p]\n", argv[0]);
+            exit(1);
+        }
+    }
+}
+
+void parseRows(int argc, char **argv, char **infile, char **outfile, int *pFlag)
+{
+    // Declare variables for command line arguments
+    int opt;
+
+    // Parse command line arguments using getopt
+    while ((opt = getopt(argc, argv, "pi:o:")) != -1)
+    {
+        switch (opt)
+        {
+        case 'p':
+            *pFlag = 1;
+            break;
+        case 'i':
+            *infile = optarg;
+            break;
+        case 'o':
+            *outfile = optarg;
+            break;
+        default:
+            printf("Usage: %s -i <in file> -o <out filename> [-p]\n", argv[0]);
+            exit(1);
+        }
+    }
+}
+
+void parseMake(int argc, char *argv[], int *rows, int *cols, int *min, int *max, char **fname, int *printFlag)
+{
+    *rows = 3; // Default value for rows.
+    *cols = 4; // Default value for cols.
+    *min = 0;  // Default value for min.
+    *max = 9;  // Default value for max.
+
+    int opt;
+    while ((opt = getopt(argc, argv, "r:c:l:h:o:p")) != -1)
+    {
+        switch (opt)
+        {
+        case 'r':
+            *rows = atoi(optarg);
+            break;
+        case 'c':
+            *cols = atoi(optarg);
+            break;
+        case 'l':
+            *min = atoi(optarg);
+            break;
+        case 'h':
+            *max = atoi(optarg);
+            break;
+        case 'o':
+            *fname = optarg;
+            break;
+        case 'p':
+            *printFlag = 1;
+            break;
+        default:
+            printf("Usage: %s -r <#rows> -c <#cols> -l <low> -h <high> -o <output filename> [-p]\n", argv[0]);
+            exit(1);
+        }
+    }
+}
+
+void parseMult(int argc, char *argv[], char **afile, char **bfile, char **outfile, int *pFlag)
+{
+    *afile = NULL;
+    *bfile = NULL;
+    *outfile = NULL;
+    *pFlag = 0; // Initialize the print flag to 0 (off).
+
+    int opt;
+    while ((opt = getopt(argc, argv, "a:b:c:p")) != -1)
+    {
+        switch (opt)
+        {
+        case 'a':
+            *afile = optarg;
+            break;
+        case 'b':
+            *bfile = optarg;
+            break;
+        case 'c':
+            *outfile = optarg;
+            break;
+        case 'p':
+            *pFlag = 1; // Set the print flag to 1 if the '-p' option is provided.
+            break;
+        default:
+            printf("Usage: %s -a <in file1> -b <in file2> -c <out filename> [-p]\n", argv[0]);
+            exit(1);
+        }
+    }
+}
+
+void parseRead(int argc, char *argv[], char **fname)
+{
+    *fname = NULL; // Initialize the input file name to NULL.
+
+    int opt;
+    while ((opt = getopt(argc, argv, "i:")) != -1)
+    {
+        switch (opt)
+        {
+        case 'i':
+            *fname = optarg;
+            break;
+        default:
+            printf("Usage: %s -i <input filename> [-p]\n", argv[0]);
+            exit(1);
         }
     }
 }

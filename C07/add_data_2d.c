@@ -8,44 +8,6 @@
 #include "utilities.h"
 #include "timer.h"
 
-// Function to display the usage information for the program.
-void usage(char **argv)
-{
-    printf("Usage: %s-a <in file1> -b <in file2> -c <out filename> [-p]\n", argv[0]);
-}
-
-// Function to parse command-line arguments and update filenames and the print flag through pointers.
-void parse(int argc, char *argv[], char **afile, char **bfile, char **outfile, int *pFlag)
-{
-    *afile = NULL;
-    *bfile = NULL;
-    *outfile = NULL;
-    *pFlag = 0; // Initialize the print flag to 0 (off).
-
-    int opt;
-    while ((opt = getopt(argc, argv, "a:b:c:p")) != -1)
-    {
-        switch (opt)
-        {
-        case 'a':
-            *afile = optarg;
-            break;
-        case 'b':
-            *bfile = optarg;
-            break;
-        case 'c':
-            *outfile = optarg;
-            break;
-        case 'p':
-            *pFlag = 1; // Set the print flag to 1 if the '-p' option is provided.
-            break;
-        default:
-            usage(argv);
-            exit(1);
-        }
-    }
-}
-
 int main(int argc, char **argv)
 {
     char *afile = NULL;  // Initialize the first input file name to NULL.
@@ -53,11 +15,11 @@ int main(int argc, char **argv)
     char *outfile = NULL; // Initialize the output file name to NULL.
     int pFlag = 0;   // Initialize the print flag to 0 (off).
 
-    parse(argc, argv, &afile, &bfile, &outfile, &pFlag);
+    parseAdd(argc, argv, &afile, &bfile, &outfile, &pFlag);
 
-    if (afile == NULL || bfile == NULL || outfile == NULL)
+    if(afile == NULL || bfile == NULL || outfile == NULL)
     {
-        usage(argv);
+        printf("Usage: [-p] -a <in file1> -b <in file2> -c <out filename>\n");
         exit(1);
     }
 

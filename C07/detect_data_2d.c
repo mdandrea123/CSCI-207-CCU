@@ -7,38 +7,15 @@
 #include "utilities.h"
 #include "timer.h"
 
-// Function to display usage information for the program
-void usage(char **argv)
-{
-    printf("Usage: %s -i <in file>", argv[0]);
-}
-
-void parse(int argc, char **argv, char **infile, int *pflag)
-{
-    int opt;
-
-    // Parse command line arguments using getopt
-    while ((opt = getopt(argc, argv, "pi:")) != -1)
-    {
-        switch (opt)
-        {
-            case 'i':
-                *infile = optarg;
-                break;
-            case 'p':
-                *pflag = 1;
-                break;
-            default:
-                usage(argv);
-                exit(1);
-        }
-    }
-}
-
 int main(int argc, char **argv){
     char *infile = NULL;
     int pflag = 0;
-    parse(argc, argv, &infile, &pflag);
+    parseDetect(argc, argv, &infile, &pflag);
+
+    if(infile == NULL){
+        printf("Usage: [-p] -i <in file>\n");
+        exit(1);
+    }
 
     double start, end, elapsed;
     dtype **m1 = NULL;

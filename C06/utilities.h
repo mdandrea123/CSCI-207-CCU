@@ -16,4 +16,11 @@ void row_checksum(dtype **A, dtype **B, int rows, int cols);
 void col_checksum(dtype **A, dtype **B, int rows, int cols);
 void matrix_checksum(dtype **A, dtype **B, dtype **C, int rows, int cols);
 void mul_matrix(dtype **A, dtype **B, dtype **C, int rows, int bcols, int acols);
+void parseAdd(int argc, char *argv[], char **afile, char **bfile, char **outfile, int *pFlag);
+void parseCols(int argc, char **argv, char **infile, char **outfile, int *pflag);
+void parseData(int argc, char **argv, char **infile, char **outfile, int *pFlag);
+void parseRows(int argc, char **argv, char **infile, char **outfile, int *pFlag);
+void parseMake(int argc, char *argv[], int *rows, int *cols, int *min, int *max, char **fname, int *printFlag);
+void parseMult(int argc, char *argv[], char **afile, char **bfile, char **outfile, int *pFlag);
+void parseRead(int argc, char *argv[], char **fname);
 #endif

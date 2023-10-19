@@ -8,41 +8,15 @@
 #include "utilities.h"
 #include "timer.h"
 
-// Function to display the usage information for the program.
-void usage(char **argv)
-{
-    printf("Usage: %s -i <input filename> [-p]\n", argv[0]);
-}
-
-// Function to parse command-line arguments and update a pointer to the input file name.
-void parse(int argc, char *argv[], char **fname)
-{
-    *fname = NULL; // Initialize the input file name to NULL.
-    
-    int opt;
-    while ((opt = getopt(argc, argv, "i:")) != -1)
-    {
-        switch (opt)
-        {
-        case 'i':
-            *fname = optarg;
-            break;
-        default:
-            usage(argv);
-            exit(1);
-        }
-    }
-}
-
 int main(int argc, char *argv[])
 {
     char *fname; // Declare a pointer to the input file name.
 
-    parse(argc, argv, &fname);
+    parseRead(argc, argv, &fname);
 
     if (fname == NULL)
     {
-        usage(argv);
+        printf("Usage: -i <input filename>\n");
         exit(1);
     }
 

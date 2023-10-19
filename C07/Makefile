@@ -43,7 +43,7 @@ cs_data_2d: cs_data_2d.o utilities.o
 mul_data_2d: mul_data_2d.o utilities.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm
 corrupt_data_2d: corrupt_data_2d.o utilities.o
-	$(CC) $(CFLAGS) -o $@ $^ -lm
+	$(CC) $(CFLAGS) -o $@ $^ -lm	
 detect_data_2d: detect_data_2d.o utilities.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm
 # Clean up object files and executables

@@ -8,46 +8,6 @@
 #include "utilities.h"
 #include "timer.h"
 
-// Function to display usage information for the program
-void usage(char **argv)
-{
-    printf("Usage: %s -i <in file> -o <out filename> [-p]\n", argv[0]);
-}
-
-// Function to parse command line arguments and store the input file name, output file name, and print flag in variables
-void parse(int argc, char **argv, char **infile, char **outfile, int *pFlag)
-{
-    // Declare variables for command line arguments
-    int opt;
-
-    // Parse command line arguments using getopt
-    while ((opt = getopt(argc, argv, "pi:o:")) != -1)
-    {
-        switch (opt)
-        {
-        case 'p':
-            *pFlag = 1;
-            break;
-        case 'i':
-            *infile = optarg;
-            break;
-        case 'o':
-            *outfile = optarg;
-            break;
-        default:
-            usage(argv);
-            exit(1);
-        }
-    }
-
-    // Check if the input file name and output file name are provided
-    if (*infile == NULL || *outfile == NULL)
-    {
-        usage(argv);
-        exit(1);
-    }
-}
-
 int main(int argc, char **argv)
 {
     // Declare variables for matrices and their dimensions
@@ -66,7 +26,13 @@ int main(int argc, char **argv)
     double start, end, elapsed;
 
     // Parse command line arguments and store the input file name, output file name, and print flag in variables
-    parse(argc, argv, &infile, &outfile, &pFlag);
+    parseData(argc, argv, &infile, &outfile, &pFlag);
+
+    if(infile == NULL || outfile == NULL)
+    {
+        printf("Usage: [-p] -i <in file> -o <out filename>\n");
+        exit(1);
+    }
 
     // Record the start time
     GET_TIME(start);

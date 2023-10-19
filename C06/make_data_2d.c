@@ -5,52 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 #include "utilities.h"
 #include "timer.h"
-
-// Function to display the usage information for the program.
-void usage(char **argv)
-{
-    printf("Usage: %s -r <#rows> -c <#cols> -l <low> -h <high> -o <output filename> [-p]\n", argv[0]);
-}
-
-// Function to parse command-line arguments and update values through pointers.
-void parse(int argc, char *argv[], int *rows, int *cols, int *min, int *max, char **fname, int *printFlag)
-{
-    *rows = 3; // Default value for rows.
-    *cols = 4; // Default value for cols.
-    *min = 0;  // Default value for min.
-    *max = 9; // Default value for max.
-
-    int opt;
-    while ((opt = getopt(argc, argv, "r:c:l:h:o:p")) != -1)
-    {
-        switch (opt)
-        {
-        case 'r':
-            *rows = atoi(optarg);
-            break;
-        case 'c':
-            *cols = atoi(optarg);
-            break;
-        case 'l':
-            *min = atoi(optarg);
-            break;
-        case 'h':
-            *max = atoi(optarg);
-            break;
-        case 'o':
-            *fname = optarg;
-            break;
-        case 'p':
-            *printFlag = 1; // Set the print flag to 1 if the '-p' option is provided.
-            break;
-        default:
-            usage(argv);
-            exit(1);
-        }
-    }
-}
 
 int main(int argc, char *argv[])
 {
@@ -58,17 +15,17 @@ int main(int argc, char *argv[])
     char *fname = NULL;
     int pFlag = 0; // Initialize the print flag to 0 (off).
 
-    parse(argc, argv, &rows, &cols, &min, &max, &fname, &pFlag);
+    parseMake(argc, argv, &rows, &cols, &min, &max, &fname, &pFlag);
 
-    if (fname == NULL)
+    if(fname == NULL)
     {
-        usage(argv);
+        printf(" Usage: [-r <#rows>] [-c <#cols>] [-l <low>] [-h <high>] -o <output filename> [-p]\n");
         exit(1);
     }
 
     dtype **matrix = NULL;
 
-    srand(0); // Seed the random number generator.
+    srand(time(NULL)); // Seed the random number generator.
 
     double start, end, elapsed;
     GET_TIME(start); // Start measuring the execution time.
