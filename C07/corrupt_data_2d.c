@@ -25,9 +25,9 @@ int main(int argc, char **argv)
 
     char *infile = NULL;
     char *outfile = NULL;
-    int crow = 0;
-    int ccol = 0;
-    int cbit = 0;
+    int crow = -1;
+    int ccol = -1;
+    int cbit = -1;
     int pflag = 0;
 
     // Parse command line arguments and store input file name, output file name, and print flag in variables
@@ -39,20 +39,30 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-   
-    if (cbit > 31 || cbit < 0){
-        printf("Invalid bit position, must be between 0 and 31 inclusive.\n");
-        exit(1);
-    }
+    
 
     // Record the start time
     GET_TIME(start);
 
     // Initialize a matrix from the input file
     initialize_from_file(&m1, &rows, &cols, infile);
-    if(crow == 0){
-        
+    
+    if(crow == -1){
+        crow = rand() % rows;
+        printf("%d\n", crow);
     }
+
+    if(ccol == -1){
+        ccol = rand() & cols - 1;
+        printf("%d\n", ccol);
+    }
+
+    if(cbit == -1){
+        cbit = rand() % 32;
+        printf("%d\n", cbit);
+    }
+   
+    //exit(0);
 
     // Allocate memory for another matrix with an extra row
     allocate2d(&m2, rows, cols);
