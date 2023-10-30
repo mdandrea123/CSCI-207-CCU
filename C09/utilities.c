@@ -632,9 +632,30 @@ void parseCorrect(int argc, char **argv, char **infile, char **outfile, int *pfl
     }
 }
 
+void parseMBE(int argc, char **argv, long long *trials, int *pFlag)
+{
+    int opt;
+
+    while ((opt = getopt(argc, argv, "n:p")) != -1)
+    {
+        switch (opt)
+        {
+        case 'n':
+            *trials = atoi(optarg);
+            break;
+        case 'p':
+            *pFlag = 1;
+            break;
+        default:
+            printf("Usage: [-p] -n <number of trials>\n");
+            exit(1);
+        }
+    }
+}
+
 void corrupt(dtype **A, dtype **B, int rows, int cols, int crow, int ccol, int cbit)
 {
-    if(crow > rows || ccol > cols){
+     if(crow > rows || ccol > cols){
         printf("Error: Row and column position cannot be greater than the number of rows or columns respectively.");
         exit(1);
     }
@@ -737,4 +758,53 @@ void correct(dtype **A, dtype **B, int rows, int cols)
     }
 
     B[correctRow][correctCol] = B[correctRow][correctCol] ^ (1 << correctBit);
+}
+
+void mbeTest(long long trials, int pflag) {
+    if (trials < 1) {
+        printf("Error: Number of trials must be greater than 0.\n");
+        printf("Usage: [-p] -n <number of trials>\n");
+        exit(0);
+    }
+    srand(time(0));
+    unsigned int a = 0;
+    unsigned int b = 0;
+    unsigned int c = 0;
+    unsigned int bprime = 0;
+    unsigned int cprime = 0;
+    double masked = 0.0;
+    unsigned int bit_position = 0;
+    double p = 0.0;
+
+    FILE *f = fopen("results.csv", "a+"); // Open the file in "append" mode
+    fcheck(f);
+
+    // Print the header only if the file is empty
+    if (ftell(f) == 0) {
+        fprintf(f, "Trials,Probability\n");
+    }
+
+    for (int i = 0; i < trials; i++) {
+        a = rand() % (1LL << 32);
+        b = rand() % (1LL << 32);
+        c = a * b;
+        bit_position = rand() % 32;
+        bprime = b ^ (1 << bit_position);
+        cprime = a * bprime;
+        if (c == cprime) {
+            masked++;
+            if (pflag) {
+                printf("BP = %d, A = 0x%x, B = 0x%x, C = 0x%x, B' = 0x%x, C' = 0x%x\n", bit_position, a, b, c, bprime, cprime);
+            }
+        }
+    }
+    p = masked / trials * 100;
+    printf("Probability of a masked benign error: %.2f%%\n", p);
+
+    fprintf(f, "%lld,%.2f\n", trials, p);
+
+    if (fclose(f) != 0) {
+        perror("Error closing file: ");
+        exit(1);
+    }
 }
