@@ -99,7 +99,7 @@ void write_to_file(dtype **A, int rows, int cols, char *fname)
     }
 }
 
-// Function to initialize a 2D array from a binary file.
+// Function to initialize a 2D array from a file.
 // It takes a pointer to a pointer to a 2D array, pointers to the number of rows and columns, and a file name as input.
 void initialize_from_file(dtype ***A, int *rows, int *cols, char *fname)
 {
@@ -172,7 +172,7 @@ void print(dtype **A, int rows, int cols)
     }
 }
 
-// Function to check if two binary files have the same size (rows and columns).
+// Function to check if the matrices in two files have the same size (rows and columns).
 // It takes the file names of two binary files as input.
 void check_size(char *aname, char *bname)
 {
@@ -647,33 +647,33 @@ void parseMultFaulty(int argc, char **argv, char **afile, char **bfile, char **o
     {
         switch (opt)
         {
-            case 'p':
-                *pFlag = 1;
-                break;
-            case 'a':
-                *afile = optarg;
-                break;
-            case 'b':
-                *bfile = optarg;
-                break;
-            case 'c':
-                *outfile = optarg;
-                break;
-            case 'x':
-                *rowIndex = atoi(optarg);
-                break;
-            case 'y':
-                *colIndex = atoi(optarg);
-                break;
-            case 'z':
-                *bit = atoi(optarg);
-                break;
-            case 'k':
-                *term = atoi(optarg);
-                break;
-            default:
-                fprintf(stderr, "Usage: %s [-p] -a <in file1> -b <in file2> -c <out filename> -x <row index> -y <col index> -z <bit position> -k <which product term in the dot product should be corrupted>\n", argv[0]);
-                exit(1);
+        case 'p':
+            *pFlag = 1;
+            break;
+        case 'a':
+            *afile = optarg;
+            break;
+        case 'b':
+            *bfile = optarg;
+            break;
+        case 'c':
+            *outfile = optarg;
+            break;
+        case 'x':
+            *rowIndex = atoi(optarg);
+            break;
+        case 'y':
+            *colIndex = atoi(optarg);
+            break;
+        case 'z':
+            *bit = atoi(optarg);
+            break;
+        case 'k':
+            *term = atoi(optarg);
+            break;
+        default:
+            fprintf(stderr, "Usage: %s [-p] -a <in file1> -b <in file2> -c <out filename> -x <row index> -y <col index> -z <bit position> -k <which product term in the dot product should be corrupted>\n", argv[0]);
+            exit(1);
         }
     }
 
@@ -684,10 +684,10 @@ void parseMultFaulty(int argc, char **argv, char **afile, char **bfile, char **o
     }
 }
 
-
 void corrupt(dtype **A, dtype **B, int rows, int cols, int crow, int ccol, int cbit)
 {
-     if(crow > rows || ccol > cols){
+    if (crow > rows || ccol > cols)
+    {
         printf("Error: Row and column position cannot be greater than the number of rows or columns respectively.");
         exit(1);
     }
@@ -750,7 +750,8 @@ Index detect(dtype **A, int rows, int cols)
 
         for (int i = 0; i < 32; i++)
         {
-            if((correctNumber ^ (1 << i)) == A[rowindex][colindex]){
+            if ((correctNumber ^ (1 << i)) == A[rowindex][colindex])
+            {
                 bit = i;
                 break;
             }
@@ -792,8 +793,10 @@ void correct(dtype **A, dtype **B, int rows, int cols)
     B[correctRow][correctCol] = B[correctRow][correctCol] ^ (1 << correctBit);
 }
 
-void mbeTest(long long trials, int pflag) {
-    if (trials < 1) {
+void mbeTest(long long trials, int pflag)
+{
+    if (trials < 1)
+    {
         printf("Error: Number of trials must be greater than 0.\n");
         printf("Usage: [-p] -n <number of trials>\n");
         exit(0);
@@ -812,20 +815,24 @@ void mbeTest(long long trials, int pflag) {
     fcheck(f);
 
     // Print the header only if the file is empty
-    if (ftell(f) == 0) {
+    if (ftell(f) == 0)
+    {
         fprintf(f, "Trials,Probability\n");
     }
 
-    for (int i = 0; i < trials; i++) {
+    for (int i = 0; i < trials; i++)
+    {
         a = rand() % (1LL << 32);
         b = rand() % (1LL << 32);
         c = a * b;
         bit_position = rand() % 32;
         bprime = b ^ (1 << bit_position);
         cprime = a * bprime;
-        if (c == cprime) {
+        if (c == cprime)
+        {
             masked++;
-            if (pflag) {
+            if (pflag)
+            {
                 printf("BP = %d, A = 0x%x, B = 0x%x, C = 0x%x, B' = 0x%x, C' = 0x%x\n", bit_position, a, b, c, bprime, cprime);
             }
         }
@@ -835,7 +842,8 @@ void mbeTest(long long trials, int pflag) {
 
     fprintf(f, "%lld,%.2f\n", trials, p);
 
-    if (fclose(f) != 0) {
+    if (fclose(f) != 0)
+    {
         perror("Error closing file: ");
         exit(1);
     }
@@ -850,10 +858,13 @@ void mul_matrixFaulty(dtype **A, dtype **B, dtype **C, int rows, int bcols, int 
             C[i][j] = 0;
             for (int k = 0; k < acols; k++)
             {
-                //C[i][j] += (A[i][k] * B[k][j]);
-                if(i == rowIndex && j ==colIndex && k == term){
+                // C[i][j] += (A[i][k] * B[k][j]);
+                if (i == rowIndex && j == colIndex && k == term)
+                {
                     C[i][j] += mul_ints(A[i][k], B[k][j], bit);
-                }else{
+                }
+                else
+                {
                     C[i][j] += (A[i][k] * B[k][j]);
                 }
             }
@@ -861,14 +872,17 @@ void mul_matrixFaulty(dtype **A, dtype **B, dtype **C, int rows, int bcols, int 
     }
 }
 
-int mul_ints(int Aik, int Bkj, int bit){
+int mul_ints(int Aik, int Bkj, int bit)
+{
     int num = Aik * (Bkj ^ (1 << bit));
     return num;
 }
 
-int result_to_int(int **m, int rows) {
+int result_to_int(int **m, int rows)
+{
     int result = 0;
-    for (int i = 0; i < rows; i++) {
+    for (int i = 0; i < rows; i++)
+    {
         result = result * 2 + m[i][0];
     }
     return result;
@@ -877,26 +891,29 @@ int result_to_int(int **m, int rows) {
 // Function to check the validity of the input number.
 void check_input(int argc, char **argv)
 {
-     if (argc != 2)
+    if (argc != 2)
     {
         printf("Usage: %s <number in hex>\n", argv[0]);
         exit(1);
     }
 
     // Check that the input number starts with "0x".
-    if (argv[1][0] != '0' || argv[1][1] != 'x'){
+    if (argv[1][0] != '0' || argv[1][1] != 'x')
+    {
         printf("Number must start with 0x\n");
         exit(1);
     }
 
     // Check that the input number is a valid hexadecimal character.
-    if(!isxdigit(argv[1][2])){
+    if (!isxdigit(argv[1][2]))
+    {
         printf("Not a valid hex character\n");
         exit(1);
     }
 
     // Check that the input number is a nibble of hex data.
-    if(argv[1][3] != '\0'){
+    if (argv[1][3] != '\0')
+    {
         printf("Number must be 1 hex character\n");
         exit(1);
     }
