@@ -140,20 +140,6 @@ void initialize_from_file(dtype ***A, int *rows, int *cols, char *fname)
 // It takes a pointer to a 2D array, the number of rows, and columns as input and prints the elements.
 void print(dtype **A, int rows, int cols)
 {
-    // for (int i = 0; i < rows; i++)
-    // {
-    //     for (int j = 0; j < cols; j++)
-    //     {
-    //     //     if(A[i][j] < 10)
-    //     //     {
-    //             printf("%d ", A[i][j]);
-    //         // }else{
-    //         //     printf("%d%d ", A[i][j] / 10, A[i][j] % 10);
-    //         // }
-    //     }
-    //     printf("\n");
-    // }
-
     int maxDigits[cols]; // Array to store the maximum width for each column
 
     // Initialize maxDigits with 0 for each column

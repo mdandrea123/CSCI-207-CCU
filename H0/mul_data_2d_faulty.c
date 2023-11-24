@@ -1,6 +1,3 @@
-// Author: Michael Dandrea
-// Class: CSCI 207
-// Date: 11/1/2023
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -42,7 +39,7 @@ int main(int argc, char **argv)
 
     // Initialize matrices from input files
     initialize_from_file(&m1, &arows, &acols, afile);
-    
+
     initialize_from_file(&m2, &brows, &bcols, bfile);
     if (rowIndex > arows || colIndex > bcols){
         printf("Row index and column index must be less than the number of rows of A and columns of B, respectively.");

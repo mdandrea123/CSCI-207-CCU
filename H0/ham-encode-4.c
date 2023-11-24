@@ -1,13 +1,11 @@
 //Author: Michael Dandrea
 //Class: CSCI 207
 //Date: 11/10/2023
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "utilities.h"
-
 
  // Main function that encodes a hex number using Hamming code (7,4).
 int main(int argc, char **argv)
@@ -80,5 +78,6 @@ int main(int argc, char **argv)
     free2d(&G2);
     free2d(&binary2);
     free2d(&result);
+    
     return 0;
 }
