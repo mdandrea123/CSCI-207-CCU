@@ -39,8 +39,6 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    
-
     // Record the start time
     GET_TIME(start);
 
